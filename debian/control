@@ -1,0 +1,73 @@
+Source: spice
+Section: misc
+Priority: optional
+Maintainer: Liang Guo <guoliang@debian.org>
+Uploaders: Michael Tokarev <mjt@tls.msk.ru>
+Build-Depends: debhelper (>= 9), pkg-config,
+ dh-autoreconf,
+ python, python-six,
+ libspice-protocol-dev (>= 0.12.10~),
+ libopus-dev (>= 0.9.14),
+ libpixman-1-dev (>= 0.17.7~),
+ libasound2-dev,
+ libssl-dev,
+ libsasl2-dev,
+ libjpeg-dev,
+ python-pyparsing,
+ libglib2.0-dev (>= 2.22~),
+ libcacard-dev,
+Standards-Version: 3.9.8
+Homepage: http://spice-space.org/
+Vcs-Git: https://anonscm.debian.org/git/collab-maint/spice.git
+Vcs-Browser: https://anonscm.debian.org/gitweb/?p=collab-maint/spice.git
+
+Package: libspice-server1
+Section: libs
+Architecture: i386 amd64
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Breaks: spice-client-gtk (<= 0.12-2), python-spice-client-gtk (<= 0.12-2), 
+ libspice-client-glib-2.0-1 (<= 0.12-2), libspice-client-gtk-2.0-1 (<= 0.12-2), 
+ libspice-client-gtk-3.0-1 (<= 0.12-2)
+Description: Implements the server side of the SPICE protocol
+ The Simple Protocol for Independent Computing Environments (SPICE) is
+ a remote display system built for virtual environments which allows
+ you to view a computing 'desktop' environment not only on the machine
+ where it is running, but from anywhere on the Internet and from a wide
+ variety of machine architectures.
+ .
+ This package contains the run-time libraries for any application that 
+ wishes to be a SPICE server.
+
+Package: libspice-server1-dbg
+Section: debug
+Architecture: i386 amd64
+Priority: extra
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: libspice-server1 (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for libspice-server1
+ The Simple Protocol for Independent Computing Environments (SPICE) is
+ a remote display system built for virtual environments which allows
+ you to view a computing 'desktop' environment not only on the machine
+ where it is running, but from anywhere on the Internet and from a wide
+ variety of machine architectures.
+ .
+ This package contains the debugging symbols for the libspice-server1
+ library.
+
+Package: libspice-server-dev
+Section: libdevel
+Architecture: i386 amd64
+Depends: libspice-server1 (= ${binary:Version}), ${misc:Depends}, libspice-protocol-dev (>= 0.12.10~)
+Suggests: pkg-config
+Description: Header files and development documentation for spice-server
+ The Simple Protocol for Independent Computing Environments (SPICE) is
+ a remote display system built for virtual environments which allows
+ you to view a computing 'desktop' environment not only on the machine
+ where it is running, but from anywhere on the Internet and from a wide
+ variety of machine architectures.
+ .
+ This package contains the header files, static libraries and development
+ documentation for spice-server. 
