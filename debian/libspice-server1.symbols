@@ -11,6 +11,8 @@ libspice-server.so.1 libspice-server1 #MINVER#
  SPICE_SERVER_0.12.4@SPICE_SERVER_0.12.4 0.12.4
  SPICE_SERVER_0.12.5@SPICE_SERVER_0.12.5 0.12.5
  SPICE_SERVER_0.12.6@SPICE_SERVER_0.12.6 0.12.6
+ SPICE_SERVER_0.13.1@SPICE_SERVER_0.13.1 0.13.1
+ SPICE_SERVER_0.13.2@SPICE_SERVER_0.13.2 0.13.2
  SPICE_SERVER_0.6.0@SPICE_SERVER_0.6.0 0.8.2
  SPICE_SERVER_0.6.1@SPICE_SERVER_0.6.1 0.8.2
  SPICE_SERVER_0.8.0@SPICE_SERVER_0.8.0 0.8.2
@@ -31,6 +33,8 @@ libspice-server.so.1 libspice-server1 #MINVER#
  spice_qxl_destroy_surfaces_async@SPICE_SERVER_0.8.2 0.8.2
  spice_qxl_driver_unload@SPICE_SERVER_0.12.3 0.12.3
  spice_qxl_flush_surfaces_async@SPICE_SERVER_0.8.2 0.8.2
+ spice_qxl_gl_draw_async@SPICE_SERVER_0.13.1 0.13.1
+ spice_qxl_gl_scanout@SPICE_SERVER_0.13.1 0.13.1
  spice_qxl_loadvm_commands@SPICE_SERVER_0.8.2 0.8.2
  spice_qxl_monitors_config_async@SPICE_SERVER_0.10.4 0.12.2
  spice_qxl_oom@SPICE_SERVER_0.8.2 0.8.2
@@ -105,6 +109,7 @@ libspice-server.so.1 libspice-server1 #MINVER#
  spice_server_set_ticket@SPICE_SERVER_0.6.0 0.8.2
  spice_server_set_tls@SPICE_SERVER_0.6.0 0.8.2
  spice_server_set_uuid@SPICE_SERVER_0.10.2 0.11.0
+ spice_server_set_video_codecs@SPICE_SERVER_0.13.2 0.13.2
  spice_server_set_zlib_glz_compression@SPICE_SERVER_0.6.0 0.8.2
  spice_server_vm_start@SPICE_SERVER_0.11.2 0.12.2
  spice_server_vm_stop@SPICE_SERVER_0.11.2 0.12.2
