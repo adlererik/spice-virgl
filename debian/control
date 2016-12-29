@@ -1,8 +1,7 @@
 Source: spice
 Section: misc
 Priority: optional
-Maintainer: Liang Guo <guoliang@debian.org>
-Uploaders: Michael Tokarev <mjt@tls.msk.ru>
+Maintainer: Erik Adler <erik.adler@gmail.com>
 Build-Depends: debhelper (>= 9), pkg-config,
  dh-autoreconf,
  python, python-six,
@@ -18,8 +17,7 @@ Build-Depends: debhelper (>= 9), pkg-config,
  libcacard-dev,
 Standards-Version: 3.9.8
 Homepage: http://spice-space.org/
-Vcs-Git: https://anonscm.debian.org/git/collab-maint/spice.git
-Vcs-Browser: https://anonscm.debian.org/gitweb/?p=collab-maint/spice.git
+Vcs-Git: https://github.com/adlererik/spice-virgl-debian.git
 
 Package: libspice-server1
 Section: libs
