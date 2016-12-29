@@ -1,0 +1,1243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.8" />
+<title>Spice protocol format file</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Spice protocol format file</h1>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph"><p>Copyright &#169; 2016 Red Hat, Inc.
+Licensed under a Creative Commons Attribution-Share Alike 3.0
+United States License (see <a href="http://creativecommons.org/licenses/by-sa/3.0/us/legalcode">http://creativecommons.org/licenses/by-sa/3.0/us/legalcode</a>).</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic">1. Basic</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The spice protocol format file defines the network protocol used by spice.
+It resemble the C format.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>file ::= &lt;definitions&gt; &lt;protocol&gt; ;
+definitions ::= &lt;definition&gt;|&lt;definitions&gt;&lt;definition&gt; ;
+definition ::= &lt;typedef&gt;|&lt;structure&gt;|&lt;enum&gt;|&lt;flag&gt;|&lt;message&gt;|&lt;channel&gt; ;
+protocol ::= "protocol" &lt;identifier&gt; "{" &lt;protocol_channels&gt; "}" ";" ;
+protocol_channels ::= &lt;protocol_channel&gt;|&lt;protocol_channels&gt;&lt;protocol_channel&gt; ;
+protocol_channel ::= &lt;identifier&gt; &lt;identifier&gt; [ "=" &lt;integer&gt; ] ";" ;
+integer ::= &lt;hex&gt;|&lt;dec&gt; ;
+dec ::= [+-][0-9]+ ;
+hex ::= "0x" [0-9a-f]+ ;
+identifier ::= [a-z][a-z0-9_]* ;</code></pre>
+</div></div>
+<div class="paragraph"><p>(here BNF with some regular expression is used).</p></div>
+<div class="paragraph"><p>It&#8217;s used to generate automatically code to marshall/demarshall the network data.</p></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>channel ExampleChannel {
+   message {
+      uint32 dummy;
+   } Dummy;
+};</code></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>protocol Example {
+    ExampleChannel first = 1001;
+};</code></pre>
+</div></div>
+<div class="paragraph"><p>As you can see brackets like C are used and structures looks like C but you
+can also see that keyworks like <code>channel</code>, <code>protocol</code>, <code>message</code> or some
+predefined types like <code>uint32</code> are proper of the protocol.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments">2. Comments</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Both C and C++ style comments are supported</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>// this is a comment
+/* this is a comment too
+   but can be split in multiple lines */</code></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_base_types">3. Base types</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>All int from 8 to 64 bit (8, 16, 32 and 64) are supported either signed or unsigned.
+Also you can pass one unix descriptor.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>base_type ::= "int8"|"uint8"|"int16"|"uint16"|"int32"|"uint32"|"int64"|"uint64"|"unix_fd" ;</code></pre>
+</div></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>int16 x;</code></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_enumerations_and_flags">4. Enumerations and flags</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>It&#8217;s possible to specify enumerations and flags. The difference is that flags are defined as 2 power
+values and can combined. Enumerations and flags must have a size (<code>8</code>, <code>16</code> or <code>32</code>) specified.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>enum ::= &lt;enum_type&gt; "{" [ &lt;enumflag_items&gt; ] "}" &lt;attributes&gt; ";" ;
+flag ::= &lt;flag_type&gt; "{" [ &lt;enumflag_items&gt; ] "}" &lt;attributes&gt; ";" ;
+enum_type ::= "enum8"|"enum16"|"enum32" ;
+flag_type ::= "flag8"|"flag16"|"flag32" ;
+enumflag_items ::= &lt;enumflag_item&gt;|&lt;enumflag_items&gt;&lt;enumflag_item&gt;
+enumflag_item ::= &lt;enum_name&gt; [ "=" &lt;integer&gt; ] [ "," ] ;
+enum_name ::= [a-z0-9_]* ;</code></pre>
+</div></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>enum16 Level {
+    LOW = 0x100,
+    MEDIUM,
+    HIGH = 0x1000
+};</code></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_variables">5. Variables</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>As you should already have noted variables are similar to C syntax but there are
+some differences.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>variable ::= &lt;type&gt; [ "*" ] &lt;identifier&gt; [ "[" &lt;array_size&gt; "]" ] &lt;attributes&gt;;</code></pre>
+</div></div>
+<div class="paragraph"><p>The <code>*</code> specify a pointer. This is quite different from C. For the protocol it
+specifies that in the protocol stream a relative offset is put that points to that
+variable usually after all defined fields. This happens even on arrays, so for instance</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>int32 *n;</code></pre>
+</div></div>
+<div class="paragraph"><p>containing a 0x12345678 <code>n</code> value could ended up coded as</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>04 00 00 00 // 4 as offset
+78 56 34 12 // `n`</code></pre>
+</div></div>
+<div class="paragraph"><p>(little endian). While an array of 2 items defined as</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>int32 *n[2];</code></pre>
+</div></div>
+<div class="paragraph"><p>and containing 0x12345678 and 0x9abcdef could end up with</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>04 00 00 00 // 4 as offset
+78 56 34 12 // `n`[0]
+ef cd ab 09 // `n`[1]</code></pre>
+</div></div>
+<div class="paragraph"><p>note that <code>int32 *n[2]</code> defined a pointer to an array of 2 items and not
+an array of pointers as C.</p></div>
+<div class="paragraph"><p><strong>WARNING</strong>: You should avoid using pointers on protocol if not necessary as they are complicated
+to handle not using autogenerated code and also use more space on the network.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arrays">6. Arrays</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>As seen above the easiest way to define an array size is specifiying a constant value.
+However there are multiple way to specify the size</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>array_size ::= &lt;integer&gt;|&lt;identifier&gt;|""|&lt;array_size_image&gt;|&lt;array_size_bytes&gt;|&lt;array_size_cstring&gt; ;
+array_size_image ::= "image_size" "(" &lt;integer&gt; "," &lt;identifier&gt; ")" ;
+array_size_bytes ::= "bytes" "(" &lt;identifier&gt; "," &lt;identifier&gt; ")" ;
+array_size_cstring ::= "cstring()" ;</code></pre>
+</div></div>
+<div class="paragraph"><p>We already seen integer.
+Specifying an identifier name instead (should be variable) indicate that the length is specified
+in another field, for instance</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>uint8 name_len;
+int8 name[name_len];</code></pre>
+</div></div>
+<div class="paragraph"><p>allows to put a name of <code>name_len</code> len.
+The empty value tell that the array will end when the containing message end so if we have</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>int8 name[];</code></pre>
+</div></div>
+<div class="paragraph"><p>and the message is</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>66 6f 6f</code></pre>
+</div></div>
+<div class="paragraph"><p>possibly the name we want is <code>foo</code> (66 6f 6f is the ASCII encoding for <code>foo</code>).</p></div>
+<div class="paragraph"><p>TODO: what happen with two [] in the structure ??
+TODO: can a [] array not be the last and what happens ??</p></div>
+<div class="paragraph"><p><code>image_size</code> allow to specify an array holding an image, for instance</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>uint16 width;
+uint16 heigth;
+uin18 raw_image[image_size(8, width, height)];</code></pre>
+</div></div>
+<div class="paragraph"><p>could contain row data in raw_image. The constant <code>8</code> is the bit size of the image.</p></div>
+<div class="paragraph"><p>TODO <code>bytes</code></p></div>
+<div class="paragraph"><p><code>cstring</code> allows to specify NUL-terminated sequence so having</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>int8 name[cstring()];</code></pre>
+</div></div>
+<div class="paragraph"><p>and the message as</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>66 6f 6f 00</code></pre>
+</div></div>
+<div class="paragraph"><p>we&#8217;ll have the <code>foo</code> name. Note that the field does not need to end the message as in <code>int8 name[]</code> example.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_structures">7. Structures</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The simpler coumpound type is the structure. As in C is defined as a list of fields (any variable or swicth).
+But as a protocol definition there are no alignment or padding and every field (beside pointer values) follow each other.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>struct ::= "struct" &lt;identifier&gt; "{" [ &lt;fields&gt; ] "}" &lt;attributes&gt; ";" ;
+fields ::= &lt;field&gt;|&lt;fields&gt;&lt;field&gt; ;
+field ::= &lt;variable&gt;|&lt;switch&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>struct Point {
+    int32 x;
+    int32 y;
+};</code></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_messages">8. Messages</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Messages have the same syntax of structure (beside <code>message</code>) with the different that they can
+be used directly inside channels.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>message ::= "message" &lt;identifier&gt; "{" [ &lt;fields&gt; ] "}" &lt;attributes&gt; ";" ;</code></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_switches">9. Switches</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>TODO</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_type_definitions">10. Type definitions</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Like C type definition allow to short types defining new ones.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>typedef ::= "typedef" &lt;identifier&gt; &lt;type&gt; &lt;attributes&gt; ;</code></pre>
+</div></div>
+<div class="paragraph"><p>note that unlike C name came before the type.</p></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>typedef XCoord int32;</code></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_channels">11. Channels</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre><code>channel ::= "channel" &lt;identifier&gt; [ ":" &lt;identifier&gt; ] "{" &lt;channel_messages&gt; "}" &lt;attributes&gt; ";" ;
+channel_messages ::= &lt;channel_message&gt;|&lt;channel_messages&gt;&lt;channel_message&gt; ;
+channel_message ::= "server:" | "client:" | "message" &lt;identifier&gt; [ "=" &lt;integer&gt; ] ;</code></pre>
+</div></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>channel ExampleChannel {
+server:
+   message {
+      uint32 dummy;
+   } Dummy;
+};</code></pre>
+</div></div>
+<div class="paragraph"><p>Note that every message is associated with a number which is used in the protocol.
+The assignment work in a similar way to enumeration in C beside first message is
+assigned 1 value and not 0. So first message (if no integer is specified) is assigned
+1, second 2 and so on.</p></div>
+<div class="paragraph"><p><code>server:</code> or <code>client:</code> specify the direction of messages following, <code>server</code> specify
+messages from server while <code>client</code> from client. If not specified is assumed from
+server.</p></div>
+<div class="paragraph"><p>For each channel you can specify a parent channel. Derived channel inherite all
+messages specified in the parent.
+Note that messages from parent can be overrided by derived channels.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_protocol">12. Protocol</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre><code>protocol ::= "protocol" &lt;identifier&gt; "{" &lt;protocol_channels&gt; "}" ";" ;
+protocol_channels ::= &lt;protocol_channel&gt;|&lt;protocol_channels&gt;&lt;protocol_channel&gt; ;
+protocol_channel ::= &lt;identifier&gt; &lt;identifier&gt; [ "=" &lt;integer&gt; ] ";" ;</code></pre>
+</div></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>protocol Example {
+    ExampleChannel first = 1001;
+};</code></pre>
+</div></div>
+<div class="paragraph"><p>Protocol specify the list of channel supported. Channel have an associated number
+assigned in a similar way of channels (incremented from one to the next with
+first starting from 0 if not specified).</p></div>
+<div class="paragraph"><p><strong>NOTE</strong>: Due to the way currently code is generate you should use
+small numbers.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_attributes">13. Attributes</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>As you probably noted attributed can be specified for lot of definitions.
+They allow to change code generated or specific contraints to the protocol.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>attributes ::= ""|&lt;attributes&gt;&lt;attribute&gt;|&lt;attribute&gt; ;
+attribute ::= &lt;attribute_name&gt; [ "(" &lt;attribute_values&gt; ")" ] ;
+attribute_values ::= &lt;attribute_values&gt; "," &lt;attribute_value&gt; | &lt;attribute_value&gt;
+attribute_value ::= &lt;integer&gt; | &lt;identifier&gt;
+attribute_name ::= @[a-z][a-z0-9_]* ;</code></pre>
+</div></div>
+<div class="paragraph"><p>Mostly of the attributes have no arguments, other currently have only one
+argument.</p></div>
+<div class="paragraph"><p><strong>NOTE</strong>: Some comments are also written in <code>spice-common</code> <code>python_modules/ptypes.py</code>
+source file.</p></div>
+<div class="sect2">
+<h3 id="_ctype">13.1. ctype</h3>
+<div class="paragraph"><p>Specify the structure type name that the generated marshaller/demarshaller code
+will use. By default the name will be converted to CamelCase and prefixed by
+<code>Spice</code> so for example a structure like</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>struct Point {
+    int32 x;
+    int32 y;
+} @ctype(MyPoint);</code></pre>
+</div></div>
+<div class="paragraph"><p>will be marshalled into a C structure like</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>struct MyPoint {
+    int32_t x;
+    int32_t y;
+};</code></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_prefix">13.2. prefix</h3>
+<div class="paragraph"><p>This attribute allow to specify the prefix used for generated enumerations (both
+protocol enumerations and flags generate C enumerations). By default the enumeration
+will use upper case of the enum/flag name prefixed with <code>SPICE_</code> and followed by item so</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>enum32 level {
+    LOW,
+    HIGH,
+};</code></pre>
+</div></div>
+<div class="paragraph"><p>will generate</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>typedef enum SpiceLevel {
+    SPICE_LEVEL_LOW,
+    SPICE_LEVEL_HIGH,
+    SPICE_LEVEL_ENUM_END
+} SpiceLevel;</code></pre>
+</div></div>
+<div class="paragraph"><p>while</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>enum32 level {
+    LOW,
+    HIGH,
+} @prefix(LVL_);</code></pre>
+</div></div>
+<div class="paragraph"><p>will generate</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>typedef enum SpiceLevel {
+    LVL_LOW,
+    LVL_HIGH,
+    SPICE_LEVEL_ENUM_END
+} SpiceLevel;</code></pre>
+</div></div>
+<div class="paragraph"><p>(note that an automatic <code>END</code> enumeration is generated and name is not affected).</p></div>
+</div>
+<div class="sect2">
+<h3 id="_end">13.3. end</h3>
+<div class="paragraph"><p>This attribute specify that the data will be appended/embedded in the final C structure.</p></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>struct test {
+    uint16 len;
+    uint16 array[len] @end;
+};</code></pre>
+</div></div>
+<div class="paragraph"><p>Output C structure:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>struct test {
+    uint16_t len;
+    uint16_t array[0];
+};</code></pre>
+</div></div>
+<div class="paragraph"><p>The generated code will allocate the C structure to allow space for extracted array.</p></div>
+<div class="paragraph"><p><strong>WARNING</strong>: This option is usually confused with with empty size protocol. The
+empty protocol array size specify array that extend on the network data while
+the <code>@end</code> attribute specify to extend the C structure (for instance in the example
+the attribute was attached to a <code>len</code>-sized array).</p></div>
+</div>
+<div class="sect2">
+<h3 id="_to_ptr">13.4. to_ptr</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_nocopy">13.5. nocopy</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_as_ptr">13.6. as_ptr</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_nomarshal">13.7. nomarshal</h3>
+<div class="paragraph"><p>Do not generate code for marshalling this variable.
+Usually used on last array element to make possible to manually feed data.</p></div>
+<div class="paragraph"><p>Example:
+    struct Data {
+        uint32 data_size;
+        uint8 data[data_size] @nomarshal;
+    };</p></div>
+</div>
+<div class="sect2">
+<h3 id="_zero_terminated">13.8. zero_terminated</h3>
+<div class="paragraph"><p>The field should terminated by zero.
+Actually it&#8217;s not used by python code so it&#8217;s not enforced and no
+code is generated.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_marshall">13.9. marshall</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_nonnull">13.10. nonnull</h3>
+<div class="paragraph"><p>This pointer field cannot be NULL. This means that marshaller assume C structure
+contain not NULL pointer and demarshaller will fail to demarshall message if offset
+is 0.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_unique_flag">13.11. unique_flag</h3>
+<div class="paragraph"><p>This flag field should contain just a single flag.
+Actually it&#8217;s not used by python code so it&#8217;s not enforced and no
+code is generated.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_ptr_array">13.12. ptr_array</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_outvar">13.13. outvar</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_anon">13.14. anon</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_chunk">13.15. chunk</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_ifdef">13.16. ifdef</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_zero">13.17. zero</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_minor">13.18. minor</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_bytes_count">13.19. bytes_count</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_virtual">13.20. virtual</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+<div class="sect2">
+<h3 id="_fixedsize">13.21. fixedsize</h3>
+<div class="paragraph"><p>TODO</p></div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-11-17 11:46:36 CET
+</div>
+</div>
+</body>
+</html>

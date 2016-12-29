@@ -1,0 +1,1201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.8" />
+<title>Spice project coding style and coding conventions</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Spice project coding style and coding conventions</h1>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph"><p>Copyright &#169; 2009-2016 Red Hat, Inc.
+Licensed under a Creative Commons Attribution-Share Alike 3.0
+United States License (see <a href="http://creativecommons.org/licenses/by-sa/3.0/us/legalcode">http://creativecommons.org/licenses/by-sa/3.0/us/legalcode</a>).</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_source_files">1. Source Files</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_names">1.1. Names</h3>
+<div class="paragraph"><p>Use lower case and separate words using dashes (e.g., file-name.c, header.h).</p></div>
+<div class="paragraph"><p>Use standard file extension for C source and header files.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_line_width">1.2. Line width</h3>
+<div class="paragraph"><p>No more than 100 characters on a single line</p></div>
+</div>
+<div class="sect2">
+<h3 id="_tabs">1.3. Tabs</h3>
+<div class="paragraph"><p>Tabs are not allowed, use 4 spaces instead</p></div>
+</div>
+<div class="sect2">
+<h3 id="_white_spaces">1.4. White spaces</h3>
+<div class="paragraph"><p>Trailing white spaces are not allowed</p></div>
+</div>
+<div class="sect2">
+<h3 id="_new_line">1.5. New Line</h3>
+<div class="paragraph"><p>Use Unix style line ending (i.e., LF)</p></div>
+<div class="paragraph"><p>New line (i.e., EOL) must be the last char in the file</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comparing">2. Comparing</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Use  right-hand comparison style.</p></div>
+<div class="paragraph"><p>Examples:<br />
+  use <code>(var == 7)</code> instead of  <code>(7 == var)</code><br />
+  use <code>(function(var) &gt; 7)</code> instead of <code>(7 &lt; function(var))</code></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_true_false_and_null">3. TRUE, FALSE and NULL</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Use <code>TRUE</code>, <code>FALSE</code> and <code>NULL</code> instead of 1 and 0 in order to improve code readability.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_static_storage_initialization">4. Static storage initialization</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>To improve code readability, explicitly initialize variables that depend on default initialization with zero/null.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fixme_and_todo">5. FIXME and TODO</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Comments that are prefixed with <code>FIXME</code> describe a bug that need to be fixed. Generally, it is not allowed to commit new code having <code>FIXME</code> comment. Committing  <code>FIXME</code> is allowed only for existing bugs. Comments that are prefixed with <code>TODO</code> describe further features, optimization or code improvements, and they are allowed to be committed along with the relevant code.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_assert">6. ASSERT</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Use it freely. ASSERT helps testing function arguments and function results validity.  ASSERT helps detecting bugs and improve code readability and stability.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sizeof">7. sizeof</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Apply function style to <code>sizeof</code> (i.e., use <code>sizeof(x)</code>)</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_const">8. const</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Use const keyword when applicable to improve code reliability and celerity.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_goto">9. goto</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Using goto is allowed in C code for error handling. In any other case it will be used only as a special exception.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_defining_constant_values">10. Defining Constant values</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Use defines for constant values for improving readability and ease of changes. Alternatively, use global <code>const</code> variables.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_short_functions">11. Short functions</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Try to split code to short functions, each having simple functionality, in order to improve code readability and re-usability. Prefix with inline short functions or functions that were splitted for readability reason.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_return_on_if">12. Return on if</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Try to return immediately on if in places that can reduce indentation level.</p></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="paragraph"><p>prefer</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">function</span></span><span style="color: #990000">(</span><span style="color: #009900">int</span> <span style="color: #990000">*</span>n<span style="color: #990000">)</span>
+<span style="color: #FF0000">{</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(!</span>n<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+        <span style="font-weight: bold"><span style="color: #0000FF">return</span></span><span style="color: #990000">;</span>
+    <span style="color: #FF0000">}</span>
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+<div class="paragraph"><p>on</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">function</span></span><span style="color: #990000">(</span><span style="color: #009900">int</span> <span style="color: #990000">*</span>n<span style="color: #990000">)</span>
+<span style="color: #FF0000">{</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(!</span>n<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+        <span style="font-weight: bold"><span style="color: #0000FF">return</span></span><span style="color: #990000">;</span>
+    <span style="color: #FF0000">}</span> <span style="font-weight: bold"><span style="color: #0000FF">else</span></span> <span style="color: #FF0000">{</span>
+        <span style="color: #990000">...</span>
+    <span style="color: #FF0000">}</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_names_2">13. Names</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+Don&#8217;t underestimate the importance of name choosing. Good names make the code more easy to understand and reduce the required level of code documentation. When choosing names, prefer long meaningful names over short vague name.
+</p>
+</li>
+<li>
+<p>
+Variable and Function names - use lower case and separate words using underscore (e.g., sample_variable_name)
+</p>
+</li>
+<li>
+<p>
+Structures, class and enum names - one or more words, each word start with upper case (e.g., Name, SampleStructName)
+</p>
+</li>
+<li>
+<p>
+Defines and enum items names - uppercase words separated using underscores (e.g., NAME, SAMPLE_DEFINE_NAME)
+</p>
+</li>
+</ul></div>
+<div class="sect2">
+<h3 id="_type_prefix">13.1. Type prefix</h3>
+<div class="paragraph"><p>In the code there are some common prefixes for types, <code>Red</code> and <code>Spice</code>.
+As a basic rule <code>Spice</code> refers to types in the public external headers while <code>Red</code> is used for internal types.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_common_abbreviations">13.2. Common abbreviations</h3>
+<div class="paragraph"><p><code>ccc</code> CursorChannelClient</p></div>
+<div class="paragraph"><p><code>dc</code>  DisplayChannel</p></div>
+<div class="paragraph"><p><code>dcc</code> DisplayChannelClient</p></div>
+<div class="paragraph"><p><code>dpi</code> drawable pipe item</p></div>
+<div class="paragraph"><p><code>rcc</code> RedChannelClient</p></div>
+<div class="paragraph"><p><code>sif</code> spice interface</p></div>
+<div class="paragraph"><p><code>sin</code> spice instance</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_optimization">14. Optimization</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Keep optimization to fast path code. Prefer safe, clear and easy to maintain coding for code that is not on the fast path.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spacing">15. Spacing</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Use spacing for improving code readability.</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">for</span></span> <span style="color: #990000">(</span>i <span style="color: #990000">=</span> <span style="color: #993399">0</span><span style="color: #990000">;</span> i <span style="color: #990000">&lt;</span> <span style="color: #993399">10</span><span style="color: #990000">;</span> <span style="color: #990000">++</span>i<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+    <span style="font-weight: bold"><span style="color: #000000">some_func</span></span><span style="color: #990000">(</span>var<span style="color: #990000">,</span> i <span style="color: #990000">*</span> i <span style="color: #990000">+</span> <span style="color: #990000">*</span>ptr<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>var<span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>var<span style="color: #990000">));</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="function_indentation">16. Function Indentation</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+No spaces between function name to left bracket.
+</p>
+</li>
+<li>
+<p>
+Curly bracket start on new line.
+</p>
+</li>
+<li>
+<p>
+Functions must be padded with empty lines on both sides
+</p>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">function</span></span><span style="color: #990000">(</span><span style="color: #008080">type1</span> arg1<span style="color: #990000">,</span> <span style="color: #008080">type2</span> arg2<span style="color: #990000">,</span> <span style="color: #008080">type2</span> arg3<span style="color: #990000">)</span>
+<span style="color: #FF0000">{</span>
+  <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+</li>
+<li>
+<p>
+In case of a new line in arguments list, align it to the first argument type.
+</p>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">function</span></span><span style="color: #990000">(</span><span style="color: #008080">type1</span> arg1<span style="color: #990000">,</span>
+              <span style="color: #008080">type2</span> arg2<span style="color: #990000">,</span>
+              <span style="color: #008080">type3</span> arg3<span style="color: #990000">)</span></tt></pre></div></div>
+<div class="paragraph"><p>Or</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">function</span></span><span style="color: #990000">(</span><span style="color: #008080">type1</span> arg1<span style="color: #990000">,</span> <span style="color: #008080">type2</span> arg2<span style="color: #990000">,</span>
+              <span style="color: #008080">type3</span> arg3<span style="color: #990000">)</span></tt></pre></div></div>
+</li>
+<li>
+<p>
+New line is acceptable in arguments list and before function name, like
+</p>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">void</span>
+<span style="font-weight: bold"><span style="color: #000000">function</span></span><span style="color: #990000">(</span><span style="color: #008080">type1</span> arg1<span style="color: #990000">,</span> <span style="color: #008080">type2</span> arg2<span style="color: #990000">,</span>
+         <span style="color: #008080">type3</span> arg3<span style="color: #990000">)</span></tt></pre></div></div>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_branching_indentation">17. Branching indentation</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+Add space after a branch keyword and after the right bracket.
+</p>
+</li>
+<li>
+<p>
+Curly bracket starts on the same line the branch starts.
+</p>
+</li>
+<li>
+<p>
+Place curly brackets after all control flow constructs even where optional. This convention reduces branching bugs that are difficult to detect. It also makes it easier to add logging messages during debugging  since it eliminates the need to add the brackets.
+</p>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>condition<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span> <span style="font-weight: bold"><span style="color: #0000FF">else</span></span> <span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>condition<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span> <span style="font-weight: bold"><span style="color: #0000FF">else</span></span> <span style="color: #FF0000">{</span>
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+<div class="paragraph"><p>In case of long condition statement, prefer having additional temporary variable over multiple line condition statement.</p></div>
+<div class="paragraph"><p>In case of new line in condition statement.</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>long_name <span style="color: #990000">&amp;&amp;</span> very_long_name <span style="color: #990000">&amp;&amp;</span> very_long <span style="color: #990000">||</span>
+                                               var_name<span style="color: #990000">)</span> <span style="color: #FF0000">{</span></tt></pre></div></div>
+<div class="paragraph"><p>or indent under the round bracket using spaces</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>long_name <span style="color: #990000">&amp;&amp;</span> very_long_name <span style="color: #990000">&amp;&amp;</span> long_name <span style="color: #990000">||</span>
+    var_name<span style="color: #990000">)</span> <span style="color: #FF0000">{</span></tt></pre></div></div>
+<div class="paragraph"><p>Break function arguments list in long condition statement according to <a href="#function_indentation">Function Indentation</a> section.</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">while</span></span> <span style="color: #990000">(</span>condition<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+        <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span>
+
+<span style="font-weight: bold"><span style="color: #0000FF">do</span></span> <span style="color: #FF0000">{</span>
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span> <span style="font-weight: bold"><span style="color: #0000FF">while</span></span> <span style="color: #990000">(</span>condition<span style="color: #990000">);</span>
+
+<span style="font-weight: bold"><span style="color: #0000FF">for</span></span> <span style="color: #990000">(</span>i <span style="color: #990000">=</span> x<span style="color: #990000">;</span> i <span style="color: #990000">&lt;</span> y<span style="color: #990000">;</span> i<span style="color: #990000">++)</span> <span style="color: #FF0000">{</span>
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span>
+
+
+<span style="font-weight: bold"><span style="color: #0000FF">switch</span></span> <span style="color: #990000">(</span>x<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+<span style="font-weight: bold"><span style="color: #0000FF">case</span></span> A<span style="color: #990000">:</span> <span style="color: #FF0000">{</span>
+    <span style="color: #990000">...</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">break</span></span><span style="color: #990000">;</span>
+<span style="color: #FF0000">}</span>
+<span style="font-weight: bold"><span style="color: #0000FF">case</span></span> B<span style="color: #990000">:</span>
+    <span style="color: #990000">...</span>
+    <span style="color: #990000">...</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">break</span></span><span style="color: #990000">;</span>
+<span style="font-weight: bold"><span style="color: #008080">default:</span></span>
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_types_indentation">18. Types indentation</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">struct</span></span> <span style="color: #008080">StructName</span> <span style="color: #FF0000">{</span>
+    <span style="color: #008080">type1</span> name1<span style="color: #990000">;</span>
+    <span style="color: #008080">type2</span> name2<span style="color: #990000">;</span>
+
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span><span style="color: #990000">;</span>
+
+<span style="font-weight: bold"><span style="color: #0000FF">enum</span></span> <span style="color: #FF0000">{</span>
+    A<span style="color: #990000">,</span>
+    B<span style="color: #990000">,</span>
+    C <span style="color: #990000">=</span> <span style="color: #993399">10</span><span style="color: #990000">,</span>
+    D<span style="color: #990000">,</span>
+<span style="color: #FF0000">}</span><span style="color: #990000">;</span>
+
+<span style="font-weight: bold"><span style="color: #0000FF">union</span></span> <span style="color: #FF0000">{</span>
+    <span style="color: #008080">type1</span> name1<span style="color: #990000">;</span>
+    <span style="color: #008080">type2</span> name2<span style="color: #990000">;</span>
+    <span style="color: #990000">...</span>
+<span style="color: #FF0000">}</span> u<span style="color: #990000">;</span></tt></pre></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_vertical_indentation">19. Vertical indentation</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Use one space no tabs and no vertical alignment.</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">long</span> var_name_1 <span style="color: #990000">=</span> <span style="color: #993399">7</span><span style="color: #990000">;</span>
+<span style="color: #009900">int</span> var_name_2 <span style="color: #990000">=</span> 1111l<span style="color: #990000">;</span>
+<span style="color: #009900">unsigned</span> <span style="color: #009900">long</span> long_var_name_1 <span style="color: #990000">=</span> <span style="color: #993399">666</span><span style="color: #990000">;</span>
+<span style="color: #009900">char</span> long_var_name_1 <span style="color: #990000">=</span> <span style="color: #FF0000">'a'</span><span style="color: #990000">;</span>
+
+<span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">f1</span></span><span style="color: #990000">(</span><span style="color: #009900">int</span> a<span style="color: #990000">,</span> <span style="color: #009900">char</span> ch<span style="color: #990000">);</span>
+<span style="color: #009900">unsigned</span> <span style="color: #009900">long</span> <span style="font-weight: bold"><span style="color: #000000">f2</span></span><span style="color: #990000">(</span><span style="color: #009900">int</span> a<span style="color: #990000">,</span> <span style="color: #009900">char</span> ch<span style="color: #990000">);</span></tt></pre></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_multi_line_macro_indentation">20. Multi line macro indentation</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #000080">#define</span></span> <span style="font-weight: bold"><span style="color: #000000">MACRO_NAME</span></span><span style="color: #990000">(</span>a<span style="color: #990000">,</span> b<span style="color: #990000">,</span> c<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>        <span style="color: #990000">\</span>
+    <span style="color: #009900">int</span> ab <span style="color: #990000">=</span> a <span style="color: #990000">+</span> c<span style="color: #990000">;</span>             <span style="color: #990000">\</span>
+    <span style="color: #009900">int</span> ac <span style="color: #990000">=</span> a <span style="color: #990000">+</span> b<span style="color: #990000">;</span>             <span style="color: #990000">\</span>
+    <span style="color: #009900">int</span> bc <span style="color: #990000">=</span> b <span style="color: #990000">+</span> c<span style="color: #990000">;</span>             <span style="color: #990000">\</span>
+    <span style="font-weight: bold"><span style="color: #000000">f</span></span><span style="color: #990000">(</span>ab<span style="color: #990000">,</span> ac<span style="color: #990000">,</span> bc<span style="color: #990000">);</span>              <span style="color: #990000">\</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_multi_line_array_indentation">21. Multi line array indentation</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">char</span> <span style="color: #990000">*</span>array<span style="color: #990000">[]</span> <span style="color: #990000">=</span> <span style="color: #FF0000">{</span>
+    <span style="color: #FF0000">"item_1"</span><span style="color: #990000">,</span>
+    <span style="color: #FF0000">"item_2"</span><span style="color: #990000">,</span>
+    <span style="color: #FF0000">"item_3"</span><span style="color: #990000">,</span>
+<span style="color: #FF0000">}</span><span style="color: #990000">;</span></tt></pre></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_header_inclusion">22. Header inclusion</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Headers should be included in this order</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;system_headers.h&gt;</span>
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;no_spice_no_system_libraries.h&gt;</span>
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;spice_protocol.h&gt;</span>
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;spice_common.h&gt;</span>
+
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">"spice_server.h"</span></tt></pre></div></div>
+<div class="paragraph"><p>(note the empty line between no spice-server and spice-server headers)</p></div>
+<div class="paragraph"><p>Also in source (no header) files you must include <code>config.h</code> at the beginning so should start (beside comments and copyright) with</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-weight: bold"><span style="color: #000080">#ifdef</span></span> HAVE_CONFIG_H
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;config.h&gt;</span>
+<span style="font-weight: bold"><span style="color: #000080">#endif</span></span>
+
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;system_headers.h&gt;</span>
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;no_spice_no_system_libraries.h&gt;</span>
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;spice_protocol.h&gt;</span>
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;spice_common.h&gt;</span>
+
+<span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">"spice_server.h"</span></tt></pre></div></div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-11-10 12:21:45 CET
+</div>
+</div>
+</body>
+</html>

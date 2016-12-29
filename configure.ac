@@ -1,0 +1,297 @@
+AC_PREREQ([2.57])
+
+# Follow the libtool manual for the so version:
+# http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
+# - If the library source code has changed at all since the last update,
+#   then increment revision (‘c:r:a’ becomes ‘c:r+1:a’).
+# - If any interfaces have been added, removed, or changed since the last update,
+#   increment current, and set revision to 0.
+# - If any interfaces have been added since the last public release,
+#   then increment age.
+# - If any interfaces have been removed or changed since the last public release,
+#   then set age to 0.
+#
+dnl TODO see server/spice-char.h TODO comment for API breakage
+m4_define([SPICE_CURRENT], [13])
+m4_define([SPICE_REVISION], [1])
+m4_define([SPICE_AGE], [12])
+
+AC_INIT(spice, [m4_esyscmd(build-aux/git-version-gen .tarball-version)],
+        [spice-devel@lists.freedesktop.org], spice)
+
+major=`echo $PACKAGE_VERSION | cut -d. -f1`
+minor=`echo $PACKAGE_VERSION | cut -d. -f2`
+micro=`echo $PACKAGE_VERSION | cut -d. -f3`
+git=`echo $PACKAGE_VERSION | cut -d. -f4`
+if test x"$git" != x ; then
+    micro=$(($micro+1))
+fi
+SPICE_SERVER_VERSION=`printf "0x%02x%02x%02x" $major $minor $micro`
+AC_SUBST(SPICE_SERVER_VERSION)
+
+AC_CONFIG_MACRO_DIR([m4])
+m4_include([spice-common/m4/spice-deps.m4])
+AM_CONFIG_HEADER([config.h])
+AC_CONFIG_AUX_DIR(.)
+
+AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip subdir-objects])
+AM_MAINTAINER_MODE
+
+AC_PROG_CC
+AC_PROG_CC_C99
+if test x"$ac_cv_prog_cc_c99" = xno; then
+    AC_MSG_ERROR([C99 compiler is required.])
+fi
+AC_PROG_INSTALL
+AC_CANONICAL_HOST
+LT_INIT([disable-static])
+AM_PROG_CC_C_O
+AC_C_BIGENDIAN
+PKG_PROG_PKG_CONFIG
+
+AC_CHECK_HEADERS([sys/time.h])
+AC_CHECK_HEADERS([execinfo.h])
+AC_CHECK_HEADERS([linux/sockios.h])
+AC_FUNC_ALLOCA
+
+SPICE_LT_VERSION=m4_format("%d:%d:%d", SPICE_CURRENT, SPICE_REVISION, SPICE_AGE)
+AC_SUBST(SPICE_LT_VERSION)
+
+# Check for the CPU we are using
+case $host_cpu in
+  x86_64)
+        ;;
+  *)
+        SPICE_WARNING([spice-server on non-x86_64 architectures has not been extensively tested])
+esac
+
+dnl =========================================================================
+dnl Check optional features
+SPICE_CHECK_SMARTCARD
+
+AC_ARG_ENABLE(gstreamer,
+              AS_HELP_STRING([--enable-gstreamer=@<:@auto/0.10/1.0/yes/no@:>@],
+                             [Enable GStreamer support]),,
+              [enable_gstreamer="auto"])
+
+if test "x$enable_gstreamer" != "xno" && test "x$enable_gstreamer" != "x0.10"; then
+    SPICE_CHECK_GSTREAMER(GSTREAMER_1_0, 1.0, [gstreamer-1.0 gstreamer-base-1.0 gstreamer-app-1.0 gstreamer-video-1.0],
+        [enable_gstreamer="1.0"
+         SPICE_CHECK_GSTREAMER_ELEMENTS($GST_INSPECT_1_0, [gst-plugins-base 1.0], [appsrc videoconvert appsink])
+         SPICE_CHECK_GSTREAMER_ELEMENTS($GST_INSPECT_1_0, [gstreamer-libav 1.0], [avenc_mjpeg])
+         SPICE_CHECK_GSTREAMER_ELEMENTS($GST_INSPECT_1_0, [gst-plugins-good 1.0], [vp8enc])
+         SPICE_CHECK_GSTREAMER_ELEMENTS($GST_INSPECT_1_0, [gst-plugins-ugly 1.0], [x264enc])
+         ],
+         [if test "x$enable_gstreamer" = "x1.0"; then
+              AC_MSG_ERROR([GStreamer 1.0 support requested but not found. You may set GSTREAMER_1_0_CFLAGS and GSTREAMER_1_0_LIBS to avoid the need to call pkg-config.])
+          fi
+    ])
+fi
+AM_CONDITIONAL(HAVE_GSTREAMER_1_0, test "x$have_gstreamer_1_0" = "xyes")
+
+if test "x$enable_gstreamer" != "xno" && test "x$enable_gstreamer" != "x1.0"; then
+    SPICE_CHECK_GSTREAMER(GSTREAMER_0_10, 0.10, [gstreamer-0.10 gstreamer-base-0.10 gstreamer-app-0.10 gstreamer-video-0.10],
+        [enable_gstreamer="0.10"
+         SPICE_CHECK_GSTREAMER_ELEMENTS($GST_INSPECT_0_10, [gst-plugins-base 0.10], [appsrc appsink])
+         SPICE_CHECK_GSTREAMER_ELEMENTS($GST_INSPECT_0_10, [gstreamer-ffmpeg 0.10], [ffmpegcolorspace ffenc_mjpeg])
+         SPICE_CHECK_GSTREAMER_ELEMENTS($GST_INSPECT_0_10, [gst-plugins-bad 0.10], [vp8enc])
+         SPICE_CHECK_GSTREAMER_ELEMENTS($GST_INSPECT_0_10, [gst-plugins-ugly 0.10], [x264enc])
+        ],
+        [if test "x$enable_gstreamer" = "x0.10"; then
+             AC_MSG_ERROR([GStreamer 0.10 support requested but not found. You may set GSTREAMER_0_10_CFLAGS and GSTREAMER_0_10_LIBS to avoid the need to call pkg-config.])
+         fi
+    ])
+fi
+AM_CONDITIONAL(HAVE_GSTREAMER_0_10, test "x$have_gstreamer_0_10" = "xyes")
+
+AS_IF([test "x$enable_gstreamer" = "xyes"],
+      [AC_MSG_ERROR("GStreamer support requested but not found")],
+      [test "x$enable_gstreamer" = "xauto"],
+      [enable_gstreamer="no"
+])
+AS_IF([test x"$missing_gstreamer_elements" = xyes],
+    [SPICE_WARNING([The GStreamer video encoder can be built but may not work.])
+])
+
+AC_ARG_ENABLE([automated_tests],
+              AS_HELP_STRING([--enable-automated-tests], [Enable automated tests using spicy-screenshot (part of spice-gtk)]),,
+              [enable_automated_tests="no"])
+AS_IF([test x"$enable_automated_tests" != "xno"], [enable_automated_tests="yes"])
+AM_CONDITIONAL(HAVE_AUTOMATED_TESTS, test "x$enable_automated_tests" != "xno")
+
+SPICE_CHECK_LZ4
+SPICE_CHECK_SASL
+
+dnl =========================================================================
+dnl Check deps
+
+AC_CONFIG_SUBDIRS([spice-common])
+COMMON_CFLAGS='-I ${top_srcdir}/spice-common/ -I ${top_builddir}/spice-common/'
+COMMON_CFLAGS+=' -DG_LOG_DOMAIN=\"Spice\"'
+AC_SUBST(COMMON_CFLAGS)
+
+AC_CHECK_LIBM
+AC_SUBST(LIBM)
+
+AC_CHECK_LIB(rt, clock_gettime, LIBRT="-lrt")
+AC_SUBST(LIBRT)
+
+AS_VAR_APPEND([SPICE_NONPKGCONFIG_LIBS], [" -pthread $LIBM $LIBRT"])
+
+SPICE_REQUIRES=""
+
+AS_IF([test x"$have_smartcard" = "xyes"], [
+    AS_VAR_APPEND([SPICE_REQUIRES], [" libcacard >= 0.1.2"])
+])
+
+SPICE_PROTOCOL_MIN_VER=0.12.12
+PKG_CHECK_MODULES([SPICE_PROTOCOL], [spice-protocol >= $SPICE_PROTOCOL_MIN_VER])
+AC_SUBST([SPICE_PROTOCOL_MIN_VER])
+
+PKG_CHECK_MODULES([GLIB2], [glib-2.0 >= 2.22 gio-2.0 >= 2.22])
+AS_VAR_APPEND([SPICE_REQUIRES], [" glib-2.0 >= 2.22 gio-2.0 >= 2.22"])
+
+PKG_CHECK_MODULES([GOBJECT2], [gobject-2.0 >= 2.22])
+AS_VAR_APPEND([SPICE_REQUIRES], [" gobject-2.0 >= 2.22"])
+
+PKG_CHECK_MODULES(PIXMAN, pixman-1 >= 0.17.7)
+AC_SUBST(PIXMAN_CFLAGS)
+AC_SUBST(PIXMAN_LIBS)
+AS_VAR_APPEND([SPICE_REQUIRES], [" pixman-1 >= 0.17.7"])
+
+AC_ARG_ENABLE([celt051],
+              AS_HELP_STRING([--disable-celt051], [Disable celt051 audio codec (enabled by default)]),,
+              [enable_celt051="yes"])
+
+if test "x$enable_celt051" = "xyes"; then
+    PKG_CHECK_MODULES(CELT051, celt051 >= 0.5.1.1, AS_VAR_APPEND([SPICE_REQUIRES], [" celt051 >= 0.5.1.1"]))
+fi
+
+PKG_CHECK_MODULES(SSL, openssl)
+AC_SUBST(SSL_CFLAGS)
+AC_SUBST(SSL_LIBS)
+AS_VAR_APPEND([SPICE_REQUIRES], [" openssl"])
+
+AC_CHECK_LIB(jpeg, jpeg_destroy_decompress,
+    AC_MSG_CHECKING([for jpeglib.h])
+    AC_TRY_CPP(
+[#include <stdio.h>
+#undef PACKAGE
+#undef VERSION
+#undef HAVE_STDLIB_H
+#include <jpeglib.h>],
+        JPEG_LIBS='-ljpeg'
+        AC_MSG_RESULT($jpeg_ok),
+	AC_MSG_ERROR([jpeglib.h not found])),
+    AC_MSG_ERROR([libjpeg not found]))
+AC_SUBST(JPEG_LIBS)
+
+AC_CHECK_LIB(z, deflate, Z_LIBS='-lz', AC_MSG_ERROR([zlib not found]))
+AC_SUBST(Z_LIBS)
+
+if test "x$enable_automated_tests" = "xyes"; then
+    AC_MSG_CHECKING([for spicy-screenshot])
+    spicy-screenshot --help >/dev/null 2>&1
+    if test $? -ne 0 ; then
+        AC_MSG_RESULT([not found])
+        AC_MSG_ERROR([spicy-screenshot was not found, this module is part of spice-gtk and is required to compile this package])
+    fi
+    AC_MSG_RESULT([found])
+fi
+
+
+AC_ARG_ENABLE([manual],
+               AS_HELP_STRING([--enable-manual=@<:@auto/yes/no@:>@],
+                              [Build SPICE manual]),
+               [],
+               [enable_manual="auto"])
+if test "x$enable_manual" != "xno"; then
+    AC_PATH_PROG([ASCIIDOC], [asciidoc])
+    AS_IF([test -z "$ASCIIDOC" && test "x$enable_manual" = "xyes"],
+          [AC_MSG_ERROR([asciidoc is missing and build of manual was requested])])
+    AC_PATH_PROG([A2X], [a2x])
+    AS_IF([test -z "$A2X" && test "x$enable_manual" = "xyes"],
+          [AC_MSG_ERROR([a2x is missing and build of manual was requested])])
+fi
+AS_IF([test -n "$ASCIIDOC"], [have_asciidoc=yes], [have_asciidoc=no])
+AM_CONDITIONAL([BUILD_MANUAL], [test -n "$ASCIIDOC" || test -n "$A2X"])
+AM_CONDITIONAL([BUILD_HTML_MANUAL], [test -n "$ASCIIDOC"])
+AM_CONDITIONAL([BUILD_CHUNKED_MANUAL], [test -n "$A2X"])
+
+
+dnl ===========================================================================
+dnl check compiler flags
+
+SPICE_COMPILE_WARNINGS
+LIBVIRT_LINKER_RELRO
+LIBVIRT_LINKER_NO_INDIRECT
+
+AC_SUBST(WARN_CFLAGS)
+
+dnl =========================================================================
+dnl -fvisibility stuff
+
+have_gcc4=no
+AC_MSG_CHECKING(for -fvisibility)
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+#if defined(__GNUC__) && (__GNUC__ >= 4)
+#else
+error Need GCC 4.0 for visibility
+#endif
+int main () { return 0; }
+])], have_gcc4=yes)
+
+if test "x$have_gcc4" = "xyes" && test ! "$os_win32" = "yes" ; then
+   VISIBILITY_HIDDEN_CFLAGS="-fvisibility=hidden"
+fi
+AC_MSG_RESULT($have_gcc4)
+AC_SUBST(VISIBILITY_HIDDEN_CFLAGS)
+
+dnl ensure linker supports ---version-script option before using it
+AC_CACHE_CHECK([if -Wl,--version-script works], [spice_cv_ld_version_script],
+    [save_LDFLAGS="$LDFLAGS"
+     LDFLAGS="$LDFLAGS -Wl,--version-script=$srcdir/server/spice-server.syms"
+     AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
+        [spice_cv_ld_version_script=yes], [spice_cv_ld_version_script=no])
+     LDFLAGS="$save_LDFLAGS"])
+AM_CONDITIONAL([HAVE_LD_VERSION_SCRIPT],
+    [test x"$spice_cv_ld_version_script" = xyes])
+
+AC_DEFINE([SPICE_USE_SAFER_CONTAINEROF], [1], [Enable more type safe version of SPICE_CONTAINEROF])
+
+AC_SUBST(SPICE_REQUIRES)
+AC_SUBST(SPICE_NONPKGCONFIG_CFLAGS)
+AC_SUBST(SPICE_NONPKGCONFIG_LIBS)
+
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
+AC_OUTPUT([
+Makefile
+spice-server.pc
+server/Makefile
+server/spice-version.h
+server/tests/Makefile
+docs/Makefile
+docs/manual/Makefile
+tools/Makefile
+])
+
+dnl ==========================================================================
+AC_MSG_NOTICE([
+
+        Spice $VERSION
+        ==============
+
+        prefix:                   ${prefix}
+        C compiler:               ${CC}
+
+        LZ4 support:              ${have_lz4}
+        Smartcard:                ${have_smartcard}
+        GStreamer:                ${enable_gstreamer}
+        SASL support:             ${have_sasl}
+        Automated tests:          ${enable_automated_tests}
+        Manual:                   ${have_asciidoc}
+
+        Now type 'make' to build $PACKAGE
+])
+SPICE_PRINT_MESSAGES
