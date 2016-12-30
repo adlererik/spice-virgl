@@ -2,8 +2,8 @@ spice (0.13.3-1) UNRELEASED; urgency=medium
 
   * New upstream release
   * New git server Vcs-Git: https://github.com/adlererik/spice-virgl
-  * Watch file will look for upstream code.
-  * gl support.  
+  * Watch file will look for upstream code
+  * gl support  
 
  -- Erik Adler <erik.adler@gmail.com>  Thu, 22 Dec 2016 02:56:44 +0100
 

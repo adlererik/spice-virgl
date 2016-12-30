@@ -17,7 +17,7 @@ Build-Depends: debhelper (>= 9), pkg-config,
  libcacard-dev,
 Standards-Version: 3.9.8
 Homepage: http://spice-space.org/
-Vcs-Git: https://github.com/adlererik/spice-virgl-debian.git
+Vcs-Git: https://github.com/adlererik/spice-virgl.git
 
 Package: libspice-server1
 Section: libs
