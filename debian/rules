@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --parallel --with autoreconf
+
+override_dh_auto_configure:
+	dh_auto_configure --  --disable-celt051 --disable-silent-rules \
+		--enable-smartcard
+# remove Requires.private defs from .pc file -- we're not building static libs
+	sed -i '/^Requires\.private:/D' spice-server.pc
+
+override_dh_strip:
+	dh_strip -plibspice-server1 --dbg-package=libspice-server1-dbg
+	dh_strip -Nlibspice-server1
+
+override_dh_installdocs:
+	dh_installdocs -plibspice-server1-dbg --link-doc=libspice-server1
+	dh_installdocs -Nlibspice-server1-dbg
